@@ -1,3 +1,12 @@
 [
-
+  { "id": 1, "subject": "トップページデザイン", "cost": 30000, "man_hour": 3, "volume": 0, "totalCosts": 0, "totalHours": 0, "category": "デザイン" },
+  { "id": 2, "subject": "下層ページデザイン", "cost": 30000, "man_hour": 1, "volume": 0, "totalCosts": 0, "totalHours": 0, "category": "デザイン" },
+  { "id": 3, "subject": "バナーデザイン", "cost": 30000, "man_hour": 0.5, "volume": 0, "totalCosts": 0, "totalHours": 0, "category": "デザイン" },
+  { "id": 4, "subject": "トップページマークアップ", "cost": 30000, "man_hour": 1, "volume": 0, "totalCosts": 0, "totalHours": 0, "category": "フロントエンド" },
+  { "id": 5, "subject": "トップページCSS設計", "cost": 30000, "man_hour": 1, "volume": 0, "totalCosts": 0, "totalHours": 0, "category": "フロントエンド" },
+  { "id": 6, "subject": "下層ページマークアップ", "cost": 30000, "man_hour": 0.5, "volume": 0, "totalCosts": 0, "totalHours": 0, "category": "フロントエンド" },
+  { "id": 7, "subject": "下層ページCSS設計", "cost": 30000, "man_hour": 0.5, "volume": 0, "totalCosts": 0, "totalHours": 0, "category": "フロントエンド" },
+  { "id": 8, "subject": "JSコーディング 難易度:高", "cost": 30000, "man_hour": 5, "volume": 0, "totalCosts": 0, "totalHours": 0, "category": "フロントエンド" },
+  { "id": 9, "subject": "JSコーディング 難易度:中", "cost": 30000, "man_hour": 3, "volume": 0, "totalCosts": 0, "totalHours": 0, "category": "フロントエンド" },
+  { "id": 10, "subject": "JSコーディング 難易度:低", "cost": 30000, "man_hour": 1, "volume": 0, "totalCosts": 0, "totalHours": 0, "category": "フロントエンド" }
 ]
