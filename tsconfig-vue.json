@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "alwaysStrict": true,
+    "module": "es2015",
+    "moduleResolution": "node",
+    "target": "es2015"
+  }
+}
