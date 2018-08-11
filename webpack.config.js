@@ -9,7 +9,6 @@ const plugins = [
 
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
-
 const vueConfig = {
   mode: process.env.NODE_ENV,
   context: path.resolve('src'),
@@ -30,18 +29,14 @@ const vueConfig = {
     filename: 'bundle.js'
   },
   resolve: {
-    extensions: ['.js', '.ts', '.vue']
+    extensions: ['.js', '.vue']
   },
   module: {
     rules: [
       {
-        test: /\.ts$/,
-        loader: 'ts-loader',
-        exclude: /node_modules/,
-        options: {
-          configFile: path.resolve('tsconfig-vue.json'),
-          appendTsSuffixTo: [/\.vue$/]
-        }
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/
       },
       {
         test: /\.vue$/,
@@ -75,34 +70,30 @@ const reactConfig = {
       })
     ]
   },
-  entry: './react/Entry.tsx',
+  entry: './react/Entry.jsx',
   output: {
     path: path.resolve('docs/react/js'),
     filename: 'bundle.js'
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js']
+    extensions: ['.jsx', '.js']
   },
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        loader: 'ts-loader',
-        exclude: /node_modules/,
-        options: {
-          configFile: path.resolve('tsconfig-react.json')
-        }
+        test: /\.jsx?$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/
       },
       {
         test: /\.css$/,
-        loader: 'css-loader',
+        loaders: ['style-loader', 'css-loader?modules'],
         exclude: /node_modules/
       }
     ]
   },
   plugins
 }
-
 
 if (process.env.NODE_ENV === 'development') {
   vueConfig.watch = reactConfig.watch = true
