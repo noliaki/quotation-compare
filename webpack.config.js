@@ -23,7 +23,7 @@ const vueConfig = {
       })
     ]
   },
-  entry: './vue/Entry.ts',
+  entry: './vue/Entry.js',
   output: {
     path: path.resolve('docs/vue/js'),
     filename: 'bundle.js'
@@ -112,4 +112,4 @@ if (process.env.NODE_ENV === 'development') {
   ])
 }
 
-module.exports = [reactConfig]
+module.exports = [vueConfig, reactConfig]
