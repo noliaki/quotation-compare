@@ -15,10 +15,12 @@
     "css-loader": "^1.0.0",
     "eslint-plugin-react": "^7.10.0",
     "eslint-plugin-vue": "^5.0.0-beta.2",
+    "gsap": "^2.0.1",
     "npm-run-all": "^4.1.3",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "style-loader": "^0.22.1",
+    "stylus": "^0.54.5",
     "uglifyjs-webpack-plugin": "^1.2.7",
     "vue": "^2.5.17",
     "vue-loader": "^15.2.7",
@@ -28,7 +30,8 @@
     "webpack-cli": "^3.1.0"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development run-p webpack bs",
+    "dev": "cross-env NODE_ENV=development run-p stylus:dev webpack bs",
+    "stylus:dev": "stylus -w -o docs src/style.styl",
     "bs": "browser-sync start -s ./docs -f ./docs --directory --no-open --no-ui --no-ghost-mode",
     "webpack": "webpack"
   },
