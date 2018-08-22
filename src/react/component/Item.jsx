@@ -13,7 +13,6 @@ export default class Item extends React.Component {
   }
 
   onChange (event) {
-    event.preventDefault()
     const nextValue = parseInt(event.currentTarget.value, 10)
 
     if (typeof nextValue !== 'number' || isNaN(nextValue)) {
@@ -64,9 +63,9 @@ export default class Item extends React.Component {
         <td className="text-center">
           <input
             type="number"
-            defaultValue={this.props.content.volume}
+            value={this.props.content.volume}
             min="0"
-            onChange={this.onChange}
+            onInput={this.onChange}
           />
         </td>
         <td className="text-center">{ this.props.content.cost.toLocaleString() }</td>

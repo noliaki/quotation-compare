@@ -4,7 +4,8 @@
   <td class="text-center">
     <input
       type="number"
-      v-model.number="volume"
+      :value="content.volume"
+      @input="onInput"
       min="0"
     >
   </td>
@@ -36,14 +37,20 @@ export default {
           self.tweenTotalCost = Math.floor(obj.val)
         }
       })
-    },
-    volume (next, prev) {
-      if (typeof next !== 'number' || isNaN(next)) {
+    }
+  },
+  methods: {
+    onInput (event) {
+      const val = parseInt(event.currentTarget.value, 10)
+
+      if (typeof val !== 'number' || isNaN(val)) {
+        this.volume = 0
         this.onChangeVolume(this.content.id, 0)
         return
       }
 
-      this.onChangeVolume(this.content.id, next)
+      this.volume = val
+      this.onChangeVolume(this.content.id, val)
     }
   },
   computed: {
