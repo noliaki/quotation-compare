@@ -1,30 +1,19 @@
 <template>
 <div class="wrapper">
-  <div class="category" v-for="categoryName in Object.keys(categorized)" :key="categoryName">
-    <h2>{{ categoryName }}</h2>
-    <div class="items">
-      <table>
-        <thead>
-          <tr>
-            <th>項目</th>
-            <th class="item-volume">数量</th>
-            <th class="item-unit_cost">単価</th>
-            <th class="item-total_cost">費用</th>
-          </tr>
-        </thead>
-        <tbody>
-          <item v-for="item in categorized[categoryName]" :item="item" :key="item.id" />
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="total-cost">{{ tweenCostTable }}</div>
+  <Category
+    v-for="key in Object.keys(categorized)"
+    :categoryName="key"
+    :items="categorized[key]"
+    :onChangeVolume="onChangeVolume"
+    :key="key"
+  />
+  <div class="total-cost">{{ tweenCostTable.toLocaleString() }}</div>
 </div>
 </template>
 
 <script>
 import Vue from 'vue'
-import item from './Item'
+import Category from './component/Category'
 import TweenLite from 'gsap/TweenLite'
 import costTable from '../cost-table.json'
 
@@ -32,11 +21,11 @@ export default Vue.extend({
   data () {
     return {
       costTable,
-      tweenCostTable: '0'
+      tweenCostTable: 0
     }
   },
   components: {
-    item
+    Category
   },
   watch: {
     totalCost (next, prev) {
@@ -48,7 +37,7 @@ export default Vue.extend({
       TweenLite.to(obj, 0.3, {
         val: next,
         onUpdate() {
-          self.tweenCostTable = Math.floor(obj.val).toLocaleString()
+          self.tweenCostTable = Math.floor(obj.val)
         }
       })
     }
@@ -66,10 +55,18 @@ export default Vue.extend({
     },
     totalCost () {
       return this.costTable.reduce((prev, current) => {
-        prev += current.volume * current.man_hour * current.cost
+        prev += current.volume * current.cost
 
         return prev
       }, 0)
+    }
+  },
+  methods: {
+    onChangeVolume(id, volume) {
+      const index = this.costTable.findIndex(item => item.id === id)
+      const cloneItem = Object.assign({}, this.costTable[index], {volume})
+
+      this.costTable.splice(index, 1, cloneItem)
     }
   },
   created () {

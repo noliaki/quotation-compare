@@ -5,32 +5,52 @@ import config from '../../config.json'
 export default class Item extends React.Component {
   constructor (props) {
     super(props)
+
+    this.onChange = this.onChange.bind(this)
     this.state = {
       tweenTotalCost: 0
     }
   }
 
-  onChange (id, event) {
+  onChange (event) {
     event.preventDefault()
+    const nextValue = parseInt(event.currentTarget.value, 10)
 
-    const prevVal = this.props.content.volume
-    const nextVal = parseInt(event.currentTarget.value, 10)
-
-    const self = this
-    const obj = {
-      val: prevVal
+    if (typeof nextValue !== 'number' || isNaN(nextValue)) {
+      this.props.onChangeVolume(this.props.content.id, 0)
+      return
     }
 
-    TweenLite.to(obj, config.duration, {
-      val: nextVal,
-      onUpdate () {
-        self.setState({
-          tweenTotalCost: Math.floor(obj.val * self.props.content.cost * self.props.content.man_hour)
-        })
-      }
-    })
+    this.props.onChangeVolume(this.props.content.id, nextValue)
+  }
 
-    this.props.onChangeVolume(id, nextVal)
+  componentDidUpdate (prevProps) {
+    if (prevProps.content.volume !== this.props.content.volume) {
+      const self = this
+      const obj = {
+        val: prevProps.content.volume
+      }
+
+      TweenLite.to(obj, config.duration, {
+        val: this.props.content.volume,
+        onUpdate () {
+          self.setState({
+            tweenTotalCost: Math.floor(obj.val * self.props.content.cost)
+          })
+        }
+      })
+    }
+  }
+
+  shouldComponentUpdate (nextProps, nextState) {
+    const hasChangedProps = nextProps.content.volume !== this.props.content.volume
+    const hasChangedState = nextState.tweenTotalCost !== this.state.tweenTotalCost
+
+    if (hasChangedProps || hasChangedState) {
+      return true
+    }
+
+    return false
   }
 
   rowClassName () {
@@ -44,9 +64,9 @@ export default class Item extends React.Component {
         <td className="text-center">
           <input
             type="number"
-            value={this.props.content.volume}
+            defaultValue={this.props.content.volume}
             min="0"
-            onChange={(event) => this.onChange(this.props.content.id, event)}
+            onChange={this.onChange}
           />
         </td>
         <td className="text-center">{ this.props.content.cost.toLocaleString() }</td>
