@@ -9,6 +9,8 @@ export default class App extends React.Component {
   constructor () {
     super()
     this.onChangeVolume = this.onChangeVolume.bind(this)
+    this.copyShareUrl = this.copyShareUrl.bind(this)
+    this.urlInput = React.createRef()
     this.state = {
       costTable,
       tweenTotalCost: 0,
@@ -16,12 +18,9 @@ export default class App extends React.Component {
     }
   }
 
-  stateToParams () {
-    const hasVolume = this.state.costTable.find(item => item.volume !== 0)
-
-    if (!hasVolume) return ''
-
-    return this.state.costTable.map(item => `${item.id}=${item.volume}`).join('&')
+  shareURL () {
+    const params = this.stateToParams()
+    return `${location.protocol}//${location.host}${location.pathname}${params ? '?' + params : ''}`
   }
 
   paramsToState (paramString) {
@@ -31,9 +30,12 @@ export default class App extends React.Component {
 
     return paramString.split('&').reduce((prev, current) => {
       const valArr = current.split('=')
+      const id = parseInt(valArr[0], 10)
+      const volume = parseInt(valArr[1], 10)
+
       prev.push({
-        id: valArr[0],
-        volume: valArr[1]
+        id,
+        volume: isNaN(volume) || volume < 0 ? 0 : volume
       })
 
       return prev
@@ -52,6 +54,56 @@ export default class App extends React.Component {
     }, {})
   }
 
+  copyShareUrl (event) {
+    this.urlInput.current.select()
+    document.execCommand('copy')
+  }
+
+  componentDidMount () {
+    const params = location.search.slice(1)
+    if (params) {
+      this.mergeParamsToState(this.paramsToState(params))
+    }
+  }
+
+  mergeParamsToState (paramsState) {
+    const shallowState = this.state.costTable.slice()
+
+    paramsState.forEach(item => {
+      const index = this.state.costTable.findIndex(stateItem => stateItem.id === item.id)
+
+      if (index > -1) {
+        const clone = Object.assign({}, this.state.costTable[index], {
+          volume: item.volume
+        })
+
+        shallowState.splice(index, 1, clone)
+      }
+    })
+
+    this.setState({
+      costTable: shallowState
+    }, () => {
+      this.tweenTotalCost()
+    })
+  }
+
+  tweenTotalCost () {
+    const self = this
+    const obj = {
+      val: this.state.tweenTotalCost
+    }
+
+    TweenLite.to(obj, config.duration, {
+      val: this.totalCost(),
+      onUpdate () {
+        self.setState({
+          tweenTotalCost: Math.floor(obj.val)
+        })
+      }
+    })
+  }
+
   onChangeVolume (id, volume) {
     const index = this.state.costTable.findIndex(item => item.id === id)
     const cloneItem = Object.assign({}, this.state.costTable[index], { volume })
@@ -66,19 +118,7 @@ export default class App extends React.Component {
       costTable: newCostTable,
       params: this.stateToParams()
     }, () => {
-      const self = this
-      const obj = {
-        val: this.state.tweenTotalCost
-      }
-
-      TweenLite.to(obj, config.duration, {
-        val: this.totalCost(),
-        onUpdate () {
-          self.setState({
-            tweenTotalCost: Math.floor(obj.val)
-          })
-        }
-      })
+      this.tweenTotalCost()
     })
   }
 
@@ -103,6 +143,10 @@ export default class App extends React.Component {
 
     return (
       <div className="wrapper">
+        <div className="share-url">
+          <input className="share-url-input" type="text" value={this.shareURL()} ref={this.urlInput} readOnly />
+          <button className="share-url-btn" type="button" onClick={this.copyShareUrl}><i className="far fa-clipboard"></i></button>
+        </div>
         { categories }
         <div className="total-cost">{ this.state.tweenTotalCost.toLocaleString() }</div>
       </div>

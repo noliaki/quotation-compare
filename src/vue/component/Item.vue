@@ -10,7 +10,7 @@
     >
   </td>
   <td class="text-center">{{ content.cost.toLocaleString() }}</td>
-  <td class="text-center">{{ tweenTotalCost.toLocaleString() }}</td>
+  <td class="text-center">¥ {{ tweenTotalCost.toLocaleString() }}</td>
 </tr>
 </template>
 <script>

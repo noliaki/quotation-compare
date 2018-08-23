@@ -31,7 +31,9 @@
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development run-p stylus:dev webpack bs",
+    "build": "cross-env NODE_ENV=production run-p stylus:prod webpack",
     "stylus:dev": "stylus -w -o docs src/style.styl",
+    "stylus:prod": "stylus -c -o docs src/style.styl",
     "bs": "browser-sync start -s ./docs -f ./docs --directory --no-open --no-ui --no-ghost-mode",
     "webpack": "webpack"
   },

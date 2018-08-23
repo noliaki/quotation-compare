@@ -1,5 +1,9 @@
 <template>
 <div class="wrapper">
+  <div class="share-url">
+    <input class="share-url-input" type="text" :value="shareURL" ref="urlInput" readOnly />
+    <button class="share-url-btn" type="button" @click=copyShareUrl><i class="far fa-clipboard"></i></button>
+  </div>
   <Category
     v-for="key in Object.keys(categorized)"
     :categoryName="key"
@@ -7,7 +11,7 @@
     :onChangeVolume="onChangeVolume"
     :key="key"
   />
-  <div class="total-cost">{{ tweenCostTable.toLocaleString() }}</div>
+  <div class="total-cost">¥ {{ tweenCostTable.toLocaleString() }}</div>
 </div>
 </template>
 
@@ -59,6 +63,17 @@ export default Vue.extend({
 
         return prev
       }, 0)
+    },
+    shareURL () {
+      const params = this.stateToParams
+      return `${location.protocol}//${location.host}${location.pathname}${params ? '?' + params : ''}`
+    },
+    stateToParams () {
+      const filteredState = this.costTable.filter(item => item.volume !== 0)
+
+      if (!filteredState.length) return ''
+
+      return filteredState.map(item => `${item.id}=${item.volume}`).join('&')
     }
   },
   methods: {
@@ -67,10 +82,51 @@ export default Vue.extend({
       const cloneItem = Object.assign({}, this.costTable[index], {volume})
 
       this.costTable.splice(index, 1, cloneItem)
+    },
+    copyShareUrl () {
+      this.$refs['urlInput'].select()
+      document.execCommand('copy')
+    },
+    paramsToState (paramString) {
+      if (!paramString) {
+        return this.costTable
+      }
+
+      return paramString.split('&').reduce((prev, current) => {
+        const valArr = current.split('=')
+        const id = parseInt(valArr[0], 10)
+        const volume = parseInt(valArr[1], 10)
+
+        prev.push({
+          id,
+          volume: isNaN(volume) || volume < 0 ? 0 : volume
+        })
+
+        return prev
+      }, [])
+    },
+    mergeParamsToState (paramsState) {
+      paramsState.forEach(item => {
+        const index = this.costTable.findIndex(stateItem => stateItem.id === item.id)
+
+        if (index > -1) {
+          const clone = Object.assign({}, this.costTable[index], {
+            volume: item.volume
+          })
+
+          this.costTable.splice(index, 1, clone)
+        }
+      })
     }
   },
   created () {
     this.tweenCostTable = this.totalCost
+  },
+  mounted () {
+    const params = location.search.slice(1)
+    if (params) {
+      this.mergeParamsToState(this.paramsToState(params))
+    }
   }
 })
 </script>

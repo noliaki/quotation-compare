@@ -6,6 +6,10 @@
     margin 0
     padding: 0
 
+&::before
+&::after
+  pointer-events: none
+
 input
   font-size inherit
   font-family: inherit
@@ -66,3 +70,33 @@ tr:nth-child(2n)
 .is-edited
   td
     background-color #eff4f7
+    &:first-child
+      font-weight bold
+      color darken(#eff4f7, 70%)
+
+.share-url
+  display: flex
+  justify-content: center
+
+.share-url-input
+  flex 1
+  padding 0.3em
+  border 1px solid #d0d0d0
+  border-top-left-radius: 5px
+  border-bottom-left-radius: 5px
+  color lighten(#404040, 40%)
+
+.share-url-btn
+  flex-basis 40px
+  font-size 1.2rem
+  background-color #586d95
+  color #fff
+  border 1px solid #d0d0d0
+  border-left none
+  border-top-right-radius: 5px
+  border-bottom-right-radius: 5px
+  outline none
+  cursor pointer
+
+input[type="number"]
+  padding 0.3em
