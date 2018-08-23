@@ -42,6 +42,14 @@ export default class App extends React.Component {
     }, [])
   }
 
+  stateToParams () {
+    const filteredState = this.state.costTable.filter(item => item.volume !== 0)
+
+    if (!filteredState.length) return ''
+
+    return filteredState.map(item => `${item.id}=${item.volume}`).join('&')
+  }
+
   categorized () {
     return this.state.costTable.reduce((prev, current, index) => {
       if (typeof prev[current.category] === 'undefined') {
