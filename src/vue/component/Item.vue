@@ -43,9 +43,9 @@ export default {
     onInput (event) {
       const val = parseInt(event.currentTarget.value, 10)
 
-      if (typeof val !== 'number' || isNaN(val)) {
-        this.volume = 0
-        this.onChangeVolume(this.content.id, 0)
+      if (isNaN(val)) {
+        this.volume = this.content.volume
+        this.onChangeVolume(this.content.id, this.content.volume)
         return
       }
 

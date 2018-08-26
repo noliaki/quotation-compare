@@ -13,8 +13,7 @@ export default class App extends React.Component {
     this.urlInput = React.createRef()
     this.state = {
       costTable,
-      tweenTotalCost: 0,
-      params: ''
+      tweenTotalCost: 0
     }
   }
 
@@ -33,10 +32,12 @@ export default class App extends React.Component {
       const id = parseInt(valArr[0], 10)
       const volume = parseInt(valArr[1], 10)
 
-      prev.push({
-        id,
-        volume: isNaN(volume) || volume < 0 ? 0 : volume
-      })
+      if (isNaN(id) || isNaN(volume)) {
+        prev.push({
+          id,
+          volume: isNaN(volume) || volume < 0 ? 0 : volume
+        })
+      }
 
       return prev
     }, [])
@@ -65,13 +66,6 @@ export default class App extends React.Component {
   copyShareUrl (event) {
     this.urlInput.current.select()
     document.execCommand('copy')
-  }
-
-  componentDidMount () {
-    const params = location.search.slice(1)
-    if (params) {
-      this.mergeParamsToState(this.paramsToState(params))
-    }
   }
 
   mergeParamsToState (paramsState) {
@@ -123,8 +117,7 @@ export default class App extends React.Component {
     ]
 
     this.setState({
-      costTable: newCostTable,
-      params: this.stateToParams()
+      costTable: newCostTable
     }, () => {
       this.tweenTotalCost()
     })
@@ -136,6 +129,13 @@ export default class App extends React.Component {
 
       return prev
     }, 0)
+  }
+
+  componentDidMount () {
+    const params = location.search.slice(1)
+    if (params) {
+      this.mergeParamsToState(this.paramsToState(params))
+    }
   }
 
   render () {

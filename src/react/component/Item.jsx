@@ -15,12 +15,27 @@ export default class Item extends React.Component {
   onChange (event) {
     const nextValue = parseInt(event.currentTarget.value, 10)
 
-    if (typeof nextValue !== 'number' || isNaN(nextValue)) {
-      this.props.onChangeVolume(this.props.content.id, 0)
+    if (isNaN(nextValue)) {
+      this.props.onChangeVolume(this.props.content.id, this.props.content.volume)
       return
     }
 
     this.props.onChangeVolume(this.props.content.id, nextValue)
+  }
+
+  rowClassName () {
+    return this.props.content.volume ? 'is-edited' : ''
+  }
+
+  shouldComponentUpdate (nextProps, nextState) {
+    const hasChangedProps = nextProps.content.volume !== this.props.content.volume
+    const hasChangedState = nextState.tweenTotalCost !== this.state.tweenTotalCost
+
+    if (hasChangedProps || hasChangedState) {
+      return true
+    }
+
+    return false
   }
 
   componentDidUpdate (prevProps) {
@@ -39,21 +54,6 @@ export default class Item extends React.Component {
         }
       })
     }
-  }
-
-  shouldComponentUpdate (nextProps, nextState) {
-    const hasChangedProps = nextProps.content.volume !== this.props.content.volume
-    const hasChangedState = nextState.tweenTotalCost !== this.state.tweenTotalCost
-
-    if (hasChangedProps || hasChangedState) {
-      return true
-    }
-
-    return false
-  }
-
-  rowClassName () {
-    return this.props.content.volume ? 'is-edited' : ''
   }
 
   render () {
