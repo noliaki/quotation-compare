@@ -68,8 +68,8 @@ export default class Item extends React.Component {
             onInput={this.onChange}
           />
         </td>
-        <td className="text-center">{ this.props.content.cost.toLocaleString() }</td>
-        <td className="text-center">{ this.state.tweenTotalCost.toLocaleString() }</td>
+        <td className="text-center">¥ { this.props.content.cost.toLocaleString() }</td>
+        <td className="text-center">¥ { this.state.tweenTotalCost.toLocaleString() }</td>
       </tr>
     )
   }

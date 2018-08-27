@@ -156,7 +156,7 @@ export default class App extends React.Component {
           <button className="share-url-btn" type="button" onClick={this.copyShareUrl}><i className="far fa-clipboard"></i></button>
         </div>
         { categories }
-        <div className="total-cost">{ this.state.tweenTotalCost.toLocaleString() }</div>
+        <div className="total-cost">¥ { this.state.tweenTotalCost.toLocaleString() }</div>
       </div>
     )
   }
