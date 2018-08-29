@@ -32,7 +32,7 @@ export default class App extends React.Component {
       const id = parseInt(valArr[0], 10)
       const volume = parseInt(valArr[1], 10)
 
-      if (isNaN(id) || isNaN(volume)) {
+      if (!isNaN(id) && !isNaN(volume)) {
         prev.push({
           id,
           volume: isNaN(volume) || volume < 0 ? 0 : volume
